@@ -6,7 +6,7 @@ const Index = (pageProps) => (
         <PageTitle>Bienvenue sur SpeedCar</PageTitle>
         <h2>La référence en course automobile amateur</h2>
         <p>Sur SpeedCar, vous pourrez participer à des courses automobile amateurs. Fini la télé, passez à la réalité et gagnez des points au classement pour devenir le meilleur pilote !</p>
-        <ButtonLink url="/signup">S'inscrire</ButtonLink>
+        {!pageProps.User && <ButtonLink url="/signup">S'inscrire</ButtonLink>}
     </div>
   );
   

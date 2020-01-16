@@ -48,6 +48,7 @@ const Header = (props) => {
       <img src="/logo.png"></img>
       <div className="left">
         <MenuItem Url="/" Name="Accueil" />
+        {props.User && <MenuItem Url="/car/list" Name="Mes voitures" />}
       </div>
       <div className="right">
         {!props.User && <MenuItem Url="/login" Name="Connexion" />}

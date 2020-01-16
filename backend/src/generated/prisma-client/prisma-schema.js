@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregateCar {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -11,9 +15,286 @@ type BatchPayload {
   count: Long!
 }
 
+type Car {
+  id: ID!
+  owner: User!
+  model: String!
+  brand: String!
+  year: Int!
+  horsepower: Int!
+}
+
+type CarConnection {
+  pageInfo: PageInfo!
+  edges: [CarEdge]!
+  aggregate: AggregateCar!
+}
+
+input CarCreateInput {
+  id: ID
+  owner: UserCreateOneWithoutCarsInput!
+  model: String!
+  brand: String!
+  year: Int!
+  horsepower: Int!
+}
+
+input CarCreateManyWithoutOwnerInput {
+  create: [CarCreateWithoutOwnerInput!]
+  connect: [CarWhereUniqueInput!]
+}
+
+input CarCreateWithoutOwnerInput {
+  id: ID
+  model: String!
+  brand: String!
+  year: Int!
+  horsepower: Int!
+}
+
+type CarEdge {
+  node: Car!
+  cursor: String!
+}
+
+enum CarOrderByInput {
+  id_ASC
+  id_DESC
+  model_ASC
+  model_DESC
+  brand_ASC
+  brand_DESC
+  year_ASC
+  year_DESC
+  horsepower_ASC
+  horsepower_DESC
+}
+
+type CarPreviousValues {
+  id: ID!
+  model: String!
+  brand: String!
+  year: Int!
+  horsepower: Int!
+}
+
+input CarScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  model: String
+  model_not: String
+  model_in: [String!]
+  model_not_in: [String!]
+  model_lt: String
+  model_lte: String
+  model_gt: String
+  model_gte: String
+  model_contains: String
+  model_not_contains: String
+  model_starts_with: String
+  model_not_starts_with: String
+  model_ends_with: String
+  model_not_ends_with: String
+  brand: String
+  brand_not: String
+  brand_in: [String!]
+  brand_not_in: [String!]
+  brand_lt: String
+  brand_lte: String
+  brand_gt: String
+  brand_gte: String
+  brand_contains: String
+  brand_not_contains: String
+  brand_starts_with: String
+  brand_not_starts_with: String
+  brand_ends_with: String
+  brand_not_ends_with: String
+  year: Int
+  year_not: Int
+  year_in: [Int!]
+  year_not_in: [Int!]
+  year_lt: Int
+  year_lte: Int
+  year_gt: Int
+  year_gte: Int
+  horsepower: Int
+  horsepower_not: Int
+  horsepower_in: [Int!]
+  horsepower_not_in: [Int!]
+  horsepower_lt: Int
+  horsepower_lte: Int
+  horsepower_gt: Int
+  horsepower_gte: Int
+  AND: [CarScalarWhereInput!]
+  OR: [CarScalarWhereInput!]
+  NOT: [CarScalarWhereInput!]
+}
+
+type CarSubscriptionPayload {
+  mutation: MutationType!
+  node: Car
+  updatedFields: [String!]
+  previousValues: CarPreviousValues
+}
+
+input CarSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CarWhereInput
+  AND: [CarSubscriptionWhereInput!]
+  OR: [CarSubscriptionWhereInput!]
+  NOT: [CarSubscriptionWhereInput!]
+}
+
+input CarUpdateInput {
+  owner: UserUpdateOneRequiredWithoutCarsInput
+  model: String
+  brand: String
+  year: Int
+  horsepower: Int
+}
+
+input CarUpdateManyDataInput {
+  model: String
+  brand: String
+  year: Int
+  horsepower: Int
+}
+
+input CarUpdateManyMutationInput {
+  model: String
+  brand: String
+  year: Int
+  horsepower: Int
+}
+
+input CarUpdateManyWithoutOwnerInput {
+  create: [CarCreateWithoutOwnerInput!]
+  delete: [CarWhereUniqueInput!]
+  connect: [CarWhereUniqueInput!]
+  set: [CarWhereUniqueInput!]
+  disconnect: [CarWhereUniqueInput!]
+  update: [CarUpdateWithWhereUniqueWithoutOwnerInput!]
+  upsert: [CarUpsertWithWhereUniqueWithoutOwnerInput!]
+  deleteMany: [CarScalarWhereInput!]
+  updateMany: [CarUpdateManyWithWhereNestedInput!]
+}
+
+input CarUpdateManyWithWhereNestedInput {
+  where: CarScalarWhereInput!
+  data: CarUpdateManyDataInput!
+}
+
+input CarUpdateWithoutOwnerDataInput {
+  model: String
+  brand: String
+  year: Int
+  horsepower: Int
+}
+
+input CarUpdateWithWhereUniqueWithoutOwnerInput {
+  where: CarWhereUniqueInput!
+  data: CarUpdateWithoutOwnerDataInput!
+}
+
+input CarUpsertWithWhereUniqueWithoutOwnerInput {
+  where: CarWhereUniqueInput!
+  update: CarUpdateWithoutOwnerDataInput!
+  create: CarCreateWithoutOwnerInput!
+}
+
+input CarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  owner: UserWhereInput
+  model: String
+  model_not: String
+  model_in: [String!]
+  model_not_in: [String!]
+  model_lt: String
+  model_lte: String
+  model_gt: String
+  model_gte: String
+  model_contains: String
+  model_not_contains: String
+  model_starts_with: String
+  model_not_starts_with: String
+  model_ends_with: String
+  model_not_ends_with: String
+  brand: String
+  brand_not: String
+  brand_in: [String!]
+  brand_not_in: [String!]
+  brand_lt: String
+  brand_lte: String
+  brand_gt: String
+  brand_gte: String
+  brand_contains: String
+  brand_not_contains: String
+  brand_starts_with: String
+  brand_not_starts_with: String
+  brand_ends_with: String
+  brand_not_ends_with: String
+  year: Int
+  year_not: Int
+  year_in: [Int!]
+  year_not_in: [Int!]
+  year_lt: Int
+  year_lte: Int
+  year_gt: Int
+  year_gte: Int
+  horsepower: Int
+  horsepower_not: Int
+  horsepower_in: [Int!]
+  horsepower_not_in: [Int!]
+  horsepower_lt: Int
+  horsepower_lte: Int
+  horsepower_gt: Int
+  horsepower_gte: Int
+  AND: [CarWhereInput!]
+  OR: [CarWhereInput!]
+  NOT: [CarWhereInput!]
+}
+
+input CarWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
+  createCar(data: CarCreateInput!): Car!
+  updateCar(data: CarUpdateInput!, where: CarWhereUniqueInput!): Car
+  updateManyCars(data: CarUpdateManyMutationInput!, where: CarWhereInput): BatchPayload!
+  upsertCar(where: CarWhereUniqueInput!, create: CarCreateInput!, update: CarUpdateInput!): Car!
+  deleteCar(where: CarWhereUniqueInput!): Car
+  deleteManyCars(where: CarWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -40,6 +321,9 @@ type PageInfo {
 }
 
 type Query {
+  car(where: CarWhereUniqueInput!): Car
+  cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car]!
+  carsConnection(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CarConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -47,6 +331,7 @@ type Query {
 }
 
 type Subscription {
+  car(where: CarSubscriptionWhereInput): CarSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -56,6 +341,7 @@ type User {
   age: Int!
   location: String!
   password: String
+  cars(where: CarWhereInput, orderBy: CarOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Car!]
 }
 
 type UserConnection {
@@ -65,6 +351,20 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
+  name: String!
+  age: Int!
+  location: String!
+  password: String
+  cars: CarCreateManyWithoutOwnerInput
+}
+
+input UserCreateOneWithoutCarsInput {
+  create: UserCreateWithoutCarsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutCarsInput {
   id: ID
   name: String!
   age: Int!
@@ -121,6 +421,7 @@ input UserUpdateInput {
   age: Int
   location: String
   password: String
+  cars: CarUpdateManyWithoutOwnerInput
 }
 
 input UserUpdateManyMutationInput {
@@ -128,6 +429,25 @@ input UserUpdateManyMutationInput {
   age: Int
   location: String
   password: String
+}
+
+input UserUpdateOneRequiredWithoutCarsInput {
+  create: UserCreateWithoutCarsInput
+  update: UserUpdateWithoutCarsDataInput
+  upsert: UserUpsertWithoutCarsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutCarsDataInput {
+  name: String
+  age: Int
+  location: String
+  password: String
+}
+
+input UserUpsertWithoutCarsInput {
+  update: UserUpdateWithoutCarsDataInput!
+  create: UserCreateWithoutCarsInput!
 }
 
 input UserWhereInput {
@@ -195,6 +515,9 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  cars_every: CarWhereInput
+  cars_some: CarWhereInput
+  cars_none: CarWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

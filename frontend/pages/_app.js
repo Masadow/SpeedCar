@@ -2,16 +2,8 @@ import App from 'next/app';
 import { ApolloProvider } from '@apollo/react-hooks';
 import Head from 'next/head';
 import withApollo from '../lib/withApollo';
-import gql from 'graphql-tag';
 import Layout from '../components/Layout';
-
-const ME_QUERY = gql`
-{
-    me {
-        id,
-        name
-    }
-}`;
+import {getUser} from '../components/Auth';
 
 function MyApp({ Component, pageProps, User, apollo }) {
     return <ApolloProvider client={apollo}>
@@ -19,7 +11,7 @@ function MyApp({ Component, pageProps, User, apollo }) {
                     <title>Speed Car</title>
                 </Head>
                 <Layout User={User}>
-                    <Component {...pageProps} />
+                    <Component User={User} {...pageProps} />
                 </Layout>
             </ApolloProvider>
   }
@@ -35,13 +27,7 @@ function MyApp({ Component, pageProps, User, apollo }) {
 
     //Fetch the logged user
     const apolloClient = appContext.ctx.apolloClient;
-    const queryResult = await apolloClient.query({query: ME_QUERY});
-
-    if (queryResult.data.me) {
-        appProps.User = queryResult.data.me;
-    } else {
-        appProps.User = null;
-    }
+    appProps.User = await getUser(appContext.ctx.apolloClient);
 
     return { ...appProps };
   }

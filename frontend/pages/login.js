@@ -1,4 +1,3 @@
-import Layout from '../components/Layout';
 import PageTitle from '../components/PageTitle';
 import Form from '../components/form/Form';
 import Input from '../components/form/Input';
@@ -22,7 +21,7 @@ function Login(pageProps) {
   let error = false;
   
 
-  const [authenticate, {client, loading, data}] = useLazyQuery(AUTHENTICATE);
+  const [authenticate, {client, data}] = useLazyQuery(AUTHENTICATE);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -33,7 +32,6 @@ function Login(pageProps) {
 
   if (data) {
     // We hit submit and got a response
-    console.log(data.authToken);
     if (data.authToken) {
       Cookies.set('authToken', data.authToken);
       client.clearStore();

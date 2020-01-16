@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  car: (where?: CarWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -38,6 +39,25 @@ export interface Prisma {
    * Queries
    */
 
+  car: (where: CarWhereUniqueInput) => CarNullablePromise;
+  cars: (args?: {
+    where?: CarWhereInput;
+    orderBy?: CarOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Car>;
+  carsConnection: (args?: {
+    where?: CarWhereInput;
+    orderBy?: CarOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => CarConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -63,6 +83,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createCar: (data: CarCreateInput) => CarPromise;
+  updateCar: (args: {
+    data: CarUpdateInput;
+    where: CarWhereUniqueInput;
+  }) => CarPromise;
+  updateManyCars: (args: {
+    data: CarUpdateManyMutationInput;
+    where?: CarWhereInput;
+  }) => BatchPayloadPromise;
+  upsertCar: (args: {
+    where: CarWhereUniqueInput;
+    create: CarCreateInput;
+    update: CarUpdateInput;
+  }) => CarPromise;
+  deleteCar: (where: CarWhereUniqueInput) => CarPromise;
+  deleteManyCars: (where?: CarWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -88,6 +124,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  car: (
+    where?: CarSubscriptionWhereInput
+  ) => CarSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -100,6 +139,18 @@ export interface ClientConstructor<T> {
 /**
  * Types
  */
+
+export type CarOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "model_ASC"
+  | "model_DESC"
+  | "brand_ASC"
+  | "brand_DESC"
+  | "year_ASC"
+  | "year_DESC"
+  | "horsepower_ASC"
+  | "horsepower_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -115,9 +166,74 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export type CarWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
+
+export interface CarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  owner?: Maybe<UserWhereInput>;
+  model?: Maybe<String>;
+  model_not?: Maybe<String>;
+  model_in?: Maybe<String[] | String>;
+  model_not_in?: Maybe<String[] | String>;
+  model_lt?: Maybe<String>;
+  model_lte?: Maybe<String>;
+  model_gt?: Maybe<String>;
+  model_gte?: Maybe<String>;
+  model_contains?: Maybe<String>;
+  model_not_contains?: Maybe<String>;
+  model_starts_with?: Maybe<String>;
+  model_not_starts_with?: Maybe<String>;
+  model_ends_with?: Maybe<String>;
+  model_not_ends_with?: Maybe<String>;
+  brand?: Maybe<String>;
+  brand_not?: Maybe<String>;
+  brand_in?: Maybe<String[] | String>;
+  brand_not_in?: Maybe<String[] | String>;
+  brand_lt?: Maybe<String>;
+  brand_lte?: Maybe<String>;
+  brand_gt?: Maybe<String>;
+  brand_gte?: Maybe<String>;
+  brand_contains?: Maybe<String>;
+  brand_not_contains?: Maybe<String>;
+  brand_starts_with?: Maybe<String>;
+  brand_not_starts_with?: Maybe<String>;
+  brand_ends_with?: Maybe<String>;
+  brand_not_ends_with?: Maybe<String>;
+  year?: Maybe<Int>;
+  year_not?: Maybe<Int>;
+  year_in?: Maybe<Int[] | Int>;
+  year_not_in?: Maybe<Int[] | Int>;
+  year_lt?: Maybe<Int>;
+  year_lte?: Maybe<Int>;
+  year_gt?: Maybe<Int>;
+  year_gte?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
+  horsepower_not?: Maybe<Int>;
+  horsepower_in?: Maybe<Int[] | Int>;
+  horsepower_not_in?: Maybe<Int[] | Int>;
+  horsepower_lt?: Maybe<Int>;
+  horsepower_lte?: Maybe<Int>;
+  horsepower_gt?: Maybe<Int>;
+  horsepower_gte?: Maybe<Int>;
+  AND?: Maybe<CarWhereInput[] | CarWhereInput>;
+  OR?: Maybe<CarWhereInput[] | CarWhereInput>;
+  NOT?: Maybe<CarWhereInput[] | CarWhereInput>;
+}
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -184,9 +300,72 @@ export interface UserWhereInput {
   password_not_starts_with?: Maybe<String>;
   password_ends_with?: Maybe<String>;
   password_not_ends_with?: Maybe<String>;
+  cars_every?: Maybe<CarWhereInput>;
+  cars_some?: Maybe<CarWhereInput>;
+  cars_none?: Maybe<CarWhereInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface CarCreateInput {
+  id?: Maybe<ID_Input>;
+  owner: UserCreateOneWithoutCarsInput;
+  model: String;
+  brand: String;
+  year: Int;
+  horsepower: Int;
+}
+
+export interface UserCreateOneWithoutCarsInput {
+  create?: Maybe<UserCreateWithoutCarsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutCarsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  age: Int;
+  location: String;
+  password?: Maybe<String>;
+}
+
+export interface CarUpdateInput {
+  owner?: Maybe<UserUpdateOneRequiredWithoutCarsInput>;
+  model?: Maybe<String>;
+  brand?: Maybe<String>;
+  year?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
+}
+
+export interface UserUpdateOneRequiredWithoutCarsInput {
+  create?: Maybe<UserCreateWithoutCarsInput>;
+  update?: Maybe<UserUpdateWithoutCarsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutCarsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutCarsDataInput {
+  name?: Maybe<String>;
+  age?: Maybe<Int>;
+  location?: Maybe<String>;
+  password?: Maybe<String>;
+}
+
+export interface UserUpsertWithoutCarsInput {
+  update: UserUpdateWithoutCarsDataInput;
+  create: UserCreateWithoutCarsInput;
+}
+
+export interface CarUpdateManyMutationInput {
+  model?: Maybe<String>;
+  brand?: Maybe<String>;
+  year?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
 }
 
 export interface UserCreateInput {
@@ -195,6 +374,20 @@ export interface UserCreateInput {
   age: Int;
   location: String;
   password?: Maybe<String>;
+  cars?: Maybe<CarCreateManyWithoutOwnerInput>;
+}
+
+export interface CarCreateManyWithoutOwnerInput {
+  create?: Maybe<CarCreateWithoutOwnerInput[] | CarCreateWithoutOwnerInput>;
+  connect?: Maybe<CarWhereUniqueInput[] | CarWhereUniqueInput>;
+}
+
+export interface CarCreateWithoutOwnerInput {
+  id?: Maybe<ID_Input>;
+  model: String;
+  brand: String;
+  year: Int;
+  horsepower: Int;
 }
 
 export interface UserUpdateInput {
@@ -202,6 +395,121 @@ export interface UserUpdateInput {
   age?: Maybe<Int>;
   location?: Maybe<String>;
   password?: Maybe<String>;
+  cars?: Maybe<CarUpdateManyWithoutOwnerInput>;
+}
+
+export interface CarUpdateManyWithoutOwnerInput {
+  create?: Maybe<CarCreateWithoutOwnerInput[] | CarCreateWithoutOwnerInput>;
+  delete?: Maybe<CarWhereUniqueInput[] | CarWhereUniqueInput>;
+  connect?: Maybe<CarWhereUniqueInput[] | CarWhereUniqueInput>;
+  set?: Maybe<CarWhereUniqueInput[] | CarWhereUniqueInput>;
+  disconnect?: Maybe<CarWhereUniqueInput[] | CarWhereUniqueInput>;
+  update?: Maybe<
+    | CarUpdateWithWhereUniqueWithoutOwnerInput[]
+    | CarUpdateWithWhereUniqueWithoutOwnerInput
+  >;
+  upsert?: Maybe<
+    | CarUpsertWithWhereUniqueWithoutOwnerInput[]
+    | CarUpsertWithWhereUniqueWithoutOwnerInput
+  >;
+  deleteMany?: Maybe<CarScalarWhereInput[] | CarScalarWhereInput>;
+  updateMany?: Maybe<
+    CarUpdateManyWithWhereNestedInput[] | CarUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CarUpdateWithWhereUniqueWithoutOwnerInput {
+  where: CarWhereUniqueInput;
+  data: CarUpdateWithoutOwnerDataInput;
+}
+
+export interface CarUpdateWithoutOwnerDataInput {
+  model?: Maybe<String>;
+  brand?: Maybe<String>;
+  year?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
+}
+
+export interface CarUpsertWithWhereUniqueWithoutOwnerInput {
+  where: CarWhereUniqueInput;
+  update: CarUpdateWithoutOwnerDataInput;
+  create: CarCreateWithoutOwnerInput;
+}
+
+export interface CarScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  model?: Maybe<String>;
+  model_not?: Maybe<String>;
+  model_in?: Maybe<String[] | String>;
+  model_not_in?: Maybe<String[] | String>;
+  model_lt?: Maybe<String>;
+  model_lte?: Maybe<String>;
+  model_gt?: Maybe<String>;
+  model_gte?: Maybe<String>;
+  model_contains?: Maybe<String>;
+  model_not_contains?: Maybe<String>;
+  model_starts_with?: Maybe<String>;
+  model_not_starts_with?: Maybe<String>;
+  model_ends_with?: Maybe<String>;
+  model_not_ends_with?: Maybe<String>;
+  brand?: Maybe<String>;
+  brand_not?: Maybe<String>;
+  brand_in?: Maybe<String[] | String>;
+  brand_not_in?: Maybe<String[] | String>;
+  brand_lt?: Maybe<String>;
+  brand_lte?: Maybe<String>;
+  brand_gt?: Maybe<String>;
+  brand_gte?: Maybe<String>;
+  brand_contains?: Maybe<String>;
+  brand_not_contains?: Maybe<String>;
+  brand_starts_with?: Maybe<String>;
+  brand_not_starts_with?: Maybe<String>;
+  brand_ends_with?: Maybe<String>;
+  brand_not_ends_with?: Maybe<String>;
+  year?: Maybe<Int>;
+  year_not?: Maybe<Int>;
+  year_in?: Maybe<Int[] | Int>;
+  year_not_in?: Maybe<Int[] | Int>;
+  year_lt?: Maybe<Int>;
+  year_lte?: Maybe<Int>;
+  year_gt?: Maybe<Int>;
+  year_gte?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
+  horsepower_not?: Maybe<Int>;
+  horsepower_in?: Maybe<Int[] | Int>;
+  horsepower_not_in?: Maybe<Int[] | Int>;
+  horsepower_lt?: Maybe<Int>;
+  horsepower_lte?: Maybe<Int>;
+  horsepower_gt?: Maybe<Int>;
+  horsepower_gte?: Maybe<Int>;
+  AND?: Maybe<CarScalarWhereInput[] | CarScalarWhereInput>;
+  OR?: Maybe<CarScalarWhereInput[] | CarScalarWhereInput>;
+  NOT?: Maybe<CarScalarWhereInput[] | CarScalarWhereInput>;
+}
+
+export interface CarUpdateManyWithWhereNestedInput {
+  where: CarScalarWhereInput;
+  data: CarUpdateManyDataInput;
+}
+
+export interface CarUpdateManyDataInput {
+  model?: Maybe<String>;
+  brand?: Maybe<String>;
+  year?: Maybe<Int>;
+  horsepower?: Maybe<Int>;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -209,6 +517,17 @@ export interface UserUpdateManyMutationInput {
   age?: Maybe<Int>;
   location?: Maybe<String>;
   password?: Maybe<String>;
+}
+
+export interface CarSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CarWhereInput>;
+  AND?: Maybe<CarSubscriptionWhereInput[] | CarSubscriptionWhereInput>;
+  OR?: Maybe<CarSubscriptionWhereInput[] | CarSubscriptionWhereInput>;
+  NOT?: Maybe<CarSubscriptionWhereInput[] | CarSubscriptionWhereInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -226,6 +545,43 @@ export interface NodeNode {
   id: ID_Output;
 }
 
+export interface Car {
+  id: ID_Output;
+  model: String;
+  brand: String;
+  year: Int;
+  horsepower: Int;
+}
+
+export interface CarPromise extends Promise<Car>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = UserPromise>() => T;
+  model: () => Promise<String>;
+  brand: () => Promise<String>;
+  year: () => Promise<Int>;
+  horsepower: () => Promise<Int>;
+}
+
+export interface CarSubscription
+  extends Promise<AsyncIterator<Car>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  owner: <T = UserSubscription>() => T;
+  model: () => Promise<AsyncIterator<String>>;
+  brand: () => Promise<AsyncIterator<String>>;
+  year: () => Promise<AsyncIterator<Int>>;
+  horsepower: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CarNullablePromise extends Promise<Car | null>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  owner: <T = UserPromise>() => T;
+  model: () => Promise<String>;
+  brand: () => Promise<String>;
+  year: () => Promise<Int>;
+  horsepower: () => Promise<Int>;
+}
+
 export interface User {
   id: ID_Output;
   name: String;
@@ -240,6 +596,15 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   age: () => Promise<Int>;
   location: () => Promise<String>;
   password: () => Promise<String>;
+  cars: <T = FragmentableArray<Car>>(args?: {
+    where?: CarWhereInput;
+    orderBy?: CarOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface UserSubscription
@@ -250,6 +615,15 @@ export interface UserSubscription
   age: () => Promise<AsyncIterator<Int>>;
   location: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  cars: <T = Promise<AsyncIterator<CarSubscription>>>(args?: {
+    where?: CarWhereInput;
+    orderBy?: CarOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface UserNullablePromise
@@ -260,27 +634,36 @@ export interface UserNullablePromise
   age: () => Promise<Int>;
   location: () => Promise<String>;
   password: () => Promise<String>;
+  cars: <T = FragmentableArray<Car>>(args?: {
+    where?: CarWhereInput;
+    orderBy?: CarOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
-export interface UserConnection {
+export interface CarConnection {
   pageInfo: PageInfo;
-  edges: UserEdge[];
+  edges: CarEdge[];
 }
 
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
+export interface CarConnectionPromise
+  extends Promise<CarConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
+  edges: <T = FragmentableArray<CarEdge>>() => T;
+  aggregate: <T = AggregateCarPromise>() => T;
 }
 
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
+export interface CarConnectionSubscription
+  extends Promise<AsyncIterator<CarConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CarEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCarSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -304,6 +687,60 @@ export interface PageInfoSubscription
   hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
   startCursor: () => Promise<AsyncIterator<String>>;
   endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface CarEdge {
+  node: Car;
+  cursor: String;
+}
+
+export interface CarEdgePromise extends Promise<CarEdge>, Fragmentable {
+  node: <T = CarPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CarEdgeSubscription
+  extends Promise<AsyncIterator<CarEdge>>,
+    Fragmentable {
+  node: <T = CarSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCar {
+  count: Int;
+}
+
+export interface AggregateCarPromise
+  extends Promise<AggregateCar>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCarSubscription
+  extends Promise<AsyncIterator<AggregateCar>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 export interface UserEdge {
@@ -353,6 +790,59 @@ export interface BatchPayloadSubscription
   extends Promise<AsyncIterator<BatchPayload>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface CarSubscriptionPayload {
+  mutation: MutationType;
+  node: Car;
+  updatedFields: String[];
+  previousValues: CarPreviousValues;
+}
+
+export interface CarSubscriptionPayloadPromise
+  extends Promise<CarSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CarPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CarPreviousValuesPromise>() => T;
+}
+
+export interface CarSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CarSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CarSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CarPreviousValuesSubscription>() => T;
+}
+
+export interface CarPreviousValues {
+  id: ID_Output;
+  model: String;
+  brand: String;
+  year: Int;
+  horsepower: Int;
+}
+
+export interface CarPreviousValuesPromise
+  extends Promise<CarPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  model: () => Promise<String>;
+  brand: () => Promise<String>;
+  year: () => Promise<Int>;
+  horsepower: () => Promise<Int>;
+}
+
+export interface CarPreviousValuesSubscription
+  extends Promise<AsyncIterator<CarPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  model: () => Promise<AsyncIterator<String>>;
+  brand: () => Promise<AsyncIterator<String>>;
+  year: () => Promise<AsyncIterator<Int>>;
+  horsepower: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -438,6 +928,10 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "Car",
     embedded: false
   }
 ];
