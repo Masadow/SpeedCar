@@ -1,0 +1,18 @@
+type Query {
+    findUser(name: String!, password: String!): User,
+    authToken(name: String!, password: String!): String,
+    users: [User],
+    me: User
+}
+
+type Mutation {
+    createUser(name: String!, age: Int!, location: String!, password: String): User
+}
+
+type User {
+  id: ID!,
+  name: String!,
+  age: Int!,
+  location: String!,
+  password: String
+}
