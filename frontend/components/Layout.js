@@ -3,7 +3,7 @@ import Panel from './Panel';
 
 const Layout = props => (
   <div>
-    <Header />
+    <Header User={props.User} />
     <Panel>
       {props.children}
     </Panel>

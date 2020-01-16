@@ -51,6 +51,8 @@ const server = new GraphQLServer({
         const token = request.headers.authorization || '';
         let user = null;
 
+        console.log(token);
+
         //Check if the user is authenticated
         try {
             const payload = jwt.verify(token, "secret");

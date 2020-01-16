@@ -8,6 +8,7 @@ import { useState } from 'react';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import { useLazyQuery } from '@apollo/react-hooks';
+import Cookies from 'js-cookie'
 
 const AUTHENTICATE = gql`
 query String($name: String!, $password: String!) {
@@ -15,13 +16,13 @@ query String($name: String!, $password: String!) {
 }
 `;
 
-function Login() {
+function Login(pageProps) {
   const [name, setName] = useState(null);
   const [password, setPassword] = useState(null);
   let error = false;
   
 
-  const [authenticate, {loading, data}] = useLazyQuery(AUTHENTICATE);
+  const [authenticate, {client, loading, data}] = useLazyQuery(AUTHENTICATE);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -34,14 +35,16 @@ function Login() {
     // We hit submit and got a response
     console.log(data.authToken);
     if (data.authToken) {
-      console.log("Success");
+      Cookies.set('authToken', data.authToken);
+      client.clearStore();
+      Router.push('/');
     } else {
       error = true;
     }
   }
 
   return (
-      <Layout>
+      <div>
         <PageTitle>Connexion</PageTitle>
         <Form onSubmit={onSubmit}>
             <Input name="name" onChange={() => setName(event.target.value)} validations={[required]} >Nom complet</Input>
@@ -54,7 +57,7 @@ function Login() {
             color: red;
           }
         `}</style>
-      </Layout>
+      </div>
     )          
 }
 

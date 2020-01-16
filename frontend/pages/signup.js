@@ -33,7 +33,7 @@ class Signup extends React.Component {
 
       render() {
         return (
-            <Layout>
+            <div>
               <PageTitle>Inscription</PageTitle>
               <Form ref={c => { this.form = c }} onSubmit={this.onSubmit}>
                   <Input name="name" onChange={this.handleChange} validations={[required]} >Nom complet</Input>
@@ -42,7 +42,7 @@ class Signup extends React.Component {
                   <Input type="password" name="password" onChange={this.handleChange} validations={[required]} >Mot de passe</Input>
                   <Submit>S'inscrire</Submit>
               </Form>
-            </Layout>
+            </div>
           )          
       }
     
