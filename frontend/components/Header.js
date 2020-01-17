@@ -11,10 +11,11 @@ const MenuItem = (props) => {
       props.OnClick(e);
     }
   }
+  
   return (
     <div>
       <Link href={props.Url || ''}>
-        <a onClick={onClick} className={router.pathname == props.Url ? 'active' : ''}>{props.Name}</a>
+        <a onClick={onClick} className={props.Url && router.pathname.split("/")[1] == props.Url.split("/")[1] ? 'active' : ''}>{props.Name}</a>
       </Link>
       <style jsx>{`
         div {
