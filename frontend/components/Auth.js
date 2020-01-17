@@ -26,7 +26,6 @@ export const withAuth = WrappedComponent =>
 
         // Probably a better way to handle this since it de-optimizes the static optimizations (because of getInitialProps)
         // If the user is not logged, redirect him to the login page
-        const apolloClient = ctx.apolloClient;
         const user = await getUser(ctx.apolloClient);
         if (!user) {
             const isServer = typeof window === 'undefined';

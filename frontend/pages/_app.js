@@ -4,17 +4,30 @@ import Head from 'next/head';
 import withApollo from '../lib/withApollo';
 import Layout from '../components/Layout';
 import {getUser} from '../components/Auth';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import ThemeProvider, {theme} from '../theme';
 
 function MyApp({ Component, pageProps, User, apollo }) {
     return <ApolloProvider client={apollo}>
                 <Head>
                     <title>Speed Car</title>
                 </Head>
-                <Layout User={User}>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <Layout User={User}>
                     <Component User={User} {...pageProps} />
-                </Layout>
+                  </Layout>
+                </ThemeProvider>
             </ApolloProvider>
   }
+
+  MyApp.componentDidMount = () => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }    
   
   // Only uncomment this method if you have blocking data requirements for
   // every single page in your application. This disables the ability to
