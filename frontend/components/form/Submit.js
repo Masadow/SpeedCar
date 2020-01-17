@@ -2,7 +2,7 @@ import { button } from 'react-validation';
 import Button from '../Button';
 
 const CustomSubmit = ({ hasErrors, ...props }) => (
-    <button {...props} disabled={hasErrors}>
+    <button {...props} disabled={hasErrors || props.disabled}>
         {props.children}
         <style jsx>{`
             button {
@@ -32,4 +32,4 @@ const CustomSubmit = ({ hasErrors, ...props }) => (
 
 const Submit = button(CustomSubmit);
   
-  export default Submit;
+export default Submit;

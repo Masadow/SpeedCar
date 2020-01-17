@@ -1,7 +1,7 @@
 module.exports = {
     CarQuery: {
         my_cars(root, args, context) {
-            return context.prisma.user({id: context.user.id}).cars()
+            return context.prisma.user({id: context.user.id}).cars();
         }
     },
     CarMutation: {
@@ -16,5 +16,10 @@ module.exports = {
                 horsepower: args.horsepower
             });
         },
+        delete_car(root, args, context) {
+            return context.prisma.deleteCar({
+                id: args.id
+            });
+        }
     }
 };

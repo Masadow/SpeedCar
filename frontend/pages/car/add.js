@@ -25,7 +25,7 @@ function CarAdd(pageProps) {
   const [year, setYear] = useState(0);
   const [horsepower, setHorsepower] = useState(0);
 
-  const [add_car, {data}] = useMutation(ADD_CAR);
+  const [add_car, {data, loading}] = useMutation(ADD_CAR);
 
   function onSubmit(e) {
     e.preventDefault();
@@ -34,7 +34,7 @@ function CarAdd(pageProps) {
     });
   }
 
-  if (data) {
+  if (data && !loading) {
     // We hit submit and got a response
     if (data.add_car) {
       Router.push('/car/list');
@@ -52,7 +52,7 @@ function CarAdd(pageProps) {
           <Input type="number" name="year" onChange={() => setYear(event.target.value)} validations={[required]} >Année</Input>
           <Input type="number" name="horsepower" onChange={() => setHorsepower(event.target.value)} validations={[required]} >Puissance</Input>
           {error && <p>Erreur inconnue</p>}
-          <Submit>Ajouter</Submit>
+          <Submit disabled={data}>Ajouter</Submit>
       </Form>
       <style>{`
           p {
