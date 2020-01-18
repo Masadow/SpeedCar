@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "deploy": "env PRISMA_ENDPOINT=http://localhost:4466 prisma deploy",
+    "generate": "env PRISMA_ENDPOINT=http://localhost:4466 prisma generate",
+    "docker_build": "sudo docker build -t speedcar/prisma_init:v1 .",
+    "docker_run": "sudo docker run -it speedcar/prisma_init:v1"
+  },
+  "dependencies": {
+    "graphql-yoga": "^1.18.3"
+  }
+}

@@ -23,13 +23,5 @@ COPY . .
 # Install prisma client
 RUN npm install -g prisma
 
-# Generate prisma client
-WORKDIR ./prisma_config
-RUN prisma generate && prisma deploy
-WORKDIR ../
-
-# Expose the api endpoint
-EXPOSE 4000
-
-# Serve the app
-CMD ["npm", "run", "dev"]
+# Deploy prisma client
+CMD ["prisma", "deploy"]

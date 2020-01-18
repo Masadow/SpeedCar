@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
+    "prod": "next start",
     "docker_build": "sudo docker build -t speedcar/frontend:v1 .",
     "docker_run": "sudo docker run -it -p 3000:3000 speedcar/frontend:v1"
   },

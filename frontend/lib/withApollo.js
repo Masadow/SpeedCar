@@ -1,47 +1,14 @@
-/*import withApollo from 'next-with-apollo';
-import ApolloClient, { InMemoryCache } from 'apollo-boost';
-import { graphql_url } from '../config';
-import nextCookie from 'next-cookies'
-import Cookies from 'js-cookie';
-
-export default withApollo(
-    ({ ctx, headers, initialState }) => {
-        const client = new ApolloClient({
-            uri: graphql_url,
-            cache: new InMemoryCache().restore(initialState || {}),
-            request: (operation) => {
-                let token = null;
-                if (ctx) {
-                    //We must use nextCookie instead of Cookies here because it won't work server side
-                    const { authToken } = nextCookie(ctx);
-                    token = authToken;
-                } else {
-                    token = Cookies.get('authToken');
-                }
-                operation.setContext({
-                    headers: {
-                        Authorization: token
-                    }
-                });
-            }
-        });
-        return client;
-    }
-);*/
-
-import React from 'react'
-import Head from 'next/head'
-import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloClient } from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-//import ApolloClient, { InMemoryCache } from "apollo-boost";
-import { HttpLink } from 'apollo-link-http'
-import fetch from 'isomorphic-unfetch'
+import React from 'react';
+import Head from 'next/head';
+import { ApolloProvider } from '@apollo/react-hooks';
+import { ApolloClient } from 'apollo-client';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
+import fetch from 'isomorphic-unfetch';
 import { setContext } from 'apollo-link-context';
 import Cookies from 'js-cookie';
-import nextCookie from 'next-cookies'
+import nextCookie from 'next-cookies';
 import { graphql_url } from '../config';
-import Router from 'next/router';
 
 let globalApolloClient = null
 
@@ -172,7 +139,7 @@ function initApolloClient(initialState, token) {
  */
 function createApolloClient(initialState = {}, token) {
     const graphqlLink = new HttpLink({
-        uri: graphql_url, // Server URL (must be absolute),
+        uri: process.env.FROM_DOCKER ? graphql_url.prod : graphql_url.dev, // Server URL (must be absolute),
 		    //credentials: 'include',
         credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
         fetch,

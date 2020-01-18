@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "deploy": "prisma deploy",
-    "generate": "prisma generate"
-  },
-  "dependencies": {
-    "graphql-yoga": "^1.18.3"
-  }
-}
