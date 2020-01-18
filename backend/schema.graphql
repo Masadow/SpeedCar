@@ -2,13 +2,15 @@ type Query {
     findUser(name: String!, password: String!): User,
     authToken(name: String!, password: String!): String,
     me: User,
-    my_cars: [Car]
+    myCars: [Car],
+    myCar(id: ID!): Car
 }
 
 type Mutation {
     signup(name: String!, age: Int!, location: String!, password: String): Boolean,
-    add_car(model: String!, brand: String!, year: Int!, horsepower: Int!): Car,
-    delete_car(id: ID!): Car,
+    addCar(model: String!, brand: String!, year: Int!, horsepower: Int!): Car,
+    editCar(id: ID!, model: String!, brand: String!, year: Int!, horsepower: Int!): Car,
+    deleteCar(id: ID!): Car,
 }
 
 type User {

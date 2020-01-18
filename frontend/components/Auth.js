@@ -3,7 +3,7 @@ import { Component } from 'react'
 import gql from 'graphql-tag';
 
 const ME_QUERY = gql`
-{
+query {
     me {
         id,
         name
@@ -24,7 +24,6 @@ export const withAuth = WrappedComponent =>
         WrappedComponent.getInitialProps &&
         (await WrappedComponent.getInitialProps(ctx))
 
-        // Probably a better way to handle this since it de-optimizes the static optimizations (because of getInitialProps)
         // If the user is not logged, redirect him to the login page
         const user = await getUser(ctx.apolloClient);
         if (!user) {

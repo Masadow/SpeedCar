@@ -10,29 +10,9 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {Delete} from '@material-ui/icons';
+import {Delete, Edit} from '@material-ui/icons';
 import Link from '../../lib/Link';
-import { identifier } from '@babel/types';
-
-const MY_CARS = gql`
-query {
-    my_cars {
-        id,
-        brand,
-        model,
-        year,
-        horsepower
-    }
-}
-`;
-
-const DELETE_CAR = gql`
-mutation Car($id: ID!) {
-    delete_car(id: $id) {
-        id
-    }
-}
-`;
+import {MY_CARS, DELETE_CAR} from '../../query/car';
 
 const List = (props) => {
     const [delete_car, {data}] = useMutation(DELETE_CAR);
@@ -46,7 +26,7 @@ const List = (props) => {
         });
     }
 
-    if (data && data.delete_car) {
+    if (data && data.deleteCar) {
         props.refresh();
     }
 
@@ -64,15 +44,16 @@ const List = (props) => {
                 </TableHead>
                 <TableBody>
                     {props.cars.map(row => (
-                    <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">{row.brand}</TableCell>
-                        <TableCell>{row.model}</TableCell>
-                        <TableCell>{row.year}</TableCell>
-                        <TableCell>{row.horsepower}</TableCell>
-                        <TableCell>
-                            <Link href="#" component="button" onClick={(e) => deleteCar(e, row.id)}><Delete /></Link>
-                        </TableCell>
-                    </TableRow>
+                        <TableRow key={row.id}>
+                            <TableCell component="th" scope="row">{row.brand}</TableCell>
+                            <TableCell>{row.model}</TableCell>
+                            <TableCell>{row.year}</TableCell>
+                            <TableCell>{row.horsepower}</TableCell>
+                            <TableCell>
+                                <Link href={'/car/edit/' + row.id} ><Edit /></Link>
+                                <Link href="#" onClick={(e) => deleteCar(e, row.id)}><Delete /></Link>
+                            </TableCell>
+                        </TableRow>
                     ))}
                 </TableBody>
             </Table>
@@ -80,19 +61,25 @@ const List = (props) => {
     );
 };
 
-const CarList = (pageProps) => {
-    const {data, loading, refetch} = useQuery(MY_CARS);
-    const my_cars = data && data.my_cars;
+const CarList = ({cars}, pageProps) => {
+    const { data, refetch } = useQuery(MY_CARS);
+    const my_cars = data && data.myCars;
 
     return (
         <div>
             <PageTitle>Mes voitures</PageTitle>
-            {loading && <p>Chargement de vos voitures</p>}
-            {!loading && !my_cars && <p>Vous n'avez aucune voiture</p>}
-            {!loading && my_cars && <List cars={my_cars} refresh={refetch} />}
+            {<p>Chargement de vos voitures</p>}
+            {!my_cars && <p>Vous n'avez aucune voiture</p>}
+            {my_cars && <List cars={my_cars} refresh={refetch} />}
             <ButtonLink url="/car/add">Ajouter une voiture</ButtonLink>
         </div>
     );
 };
+
+CarList.getInitialProps = async (ctx) => {
+    //Even though cars won't be used, it's useful to run it in getInitialProps to prefetch the response and get faster render
+    const cars = await ctx.apolloClient.query({query: MY_CARS});
+    return {cars};
+}
   
 export default withAuth(CarList);

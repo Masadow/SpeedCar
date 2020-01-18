@@ -3,19 +3,11 @@ import Form from '../../components/form/Form';
 import Input from '../../components/form/Input';
 import Submit from '../../components/form/Submit';
 import { required } from '../../components/form/Validators';
-import Router from 'next/router';
 import { useState } from 'react';
-import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import {withAuth} from '../../components/Auth';
-
-const ADD_CAR = gql`
-mutation Car($model: String!, $brand: String!, $year: Int!, $horsepower: Int!) {
-  add_car(model: $model, brand: $brand, year: $year, horsepower: $horsepower) {
-    id
-  }
-}
-`;
+import {ADD_CAR, MY_CARS} from '../../query/car';
+import Router from 'next/router';
 
 function CarAdd(pageProps) {
   let error = false;
@@ -25,18 +17,26 @@ function CarAdd(pageProps) {
   const [year, setYear] = useState(0);
   const [horsepower, setHorsepower] = useState(0);
 
-  const [add_car, {data, loading}] = useMutation(ADD_CAR);
+  const [addCar, {data, loading}] = useMutation(ADD_CAR, {
+    update(cache, {data: { addCar }}) {
+      const {myCars} = cache.readQuery({query: MY_CARS});
+      cache.writeQuery({
+        query: MY_CARS,
+        data: { myCars: myCars.concat([addCar]) },
+      });
+    }
+  });
 
   function onSubmit(e) {
     e.preventDefault();
-    add_car({
+    addCar({
       variables: {model, brand, year: parseInt(year), horsepower: parseInt(horsepower)}
     });
   }
 
   if (data && !loading) {
     // We hit submit and got a response
-    if (data.add_car) {
+    if (data.addCar) {
       Router.push('/car/list');
     } else {
       error = true;
