@@ -24,8 +24,8 @@ function MyApp({ Component, pageProps, User }) {
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
-  }    
-  
+  }
+
   // Only uncomment this method if you have blocking data requirements for
   // every single page in your application. This disables the ability to
   // perform automatic static optimization, causing every page in your app to

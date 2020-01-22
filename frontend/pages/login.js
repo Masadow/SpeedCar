@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import { useLazyQuery } from '@apollo/react-hooks';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 const AUTHENTICATE = gql`
 query String($name: String!, $password: String!) {
@@ -34,8 +34,7 @@ function Login(pageProps) {
     // We hit submit and got a response
     if (data.authToken) {
       Cookies.set('authToken', data.authToken);
-      client.clearStore();
-      Router.push('/');
+      client.clearStore().then(() => Router.push('/'));
     } else {
       error = true;
     }

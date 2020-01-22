@@ -41,8 +41,7 @@ const Header = (props) => {
   const client = useApolloClient();
   function signout(e) {
     Cookies.remove('authToken');
-    client.clearStore();
-    Router.push('/');
+    client.clearStore().then(() => Router.push('/'));
   }
   return (
     <div className="header">

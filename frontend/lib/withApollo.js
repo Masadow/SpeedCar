@@ -21,9 +21,9 @@ let globalApolloClient = null
  * @param {Boolean} [config.ssr=true]
  */
 export function withApollo(PageComponent, { ssr = true } = {}) {
-  const WithApollo = ({ apolloClient, apolloState, authToken, ...pageProps }) => {
-    const token = pageProps.pageProps.authToken || authToken;
-    const client = apolloClient || initApolloClient(apolloState, token ? token : Cookies.get('authToken'))
+  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+    const getAuthToken = pageProps.pageProps.getToken || (() => Cookies.get('authToken'));
+    const client = apolloClient || initApolloClient(apolloState, getAuthToken)
     return (
       <ApolloProvider client={client}>
         <PageComponent {...pageProps} />
@@ -48,11 +48,11 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
       const { AppTree } = ctx
 
       // We must use nextCookie instead of Cookies here because it won't work server side
-      const { authToken } = nextCookie(ctx.ctx);
+      const getToken = () => nextCookie(ctx.ctx).authToken;
 
       // Initialize ApolloClient, add it to the ctx object so
       // we can use it in `PageComponent.getInitialProp`.
-      const apolloClient = (ctx.apolloClient = initApolloClient({}, authToken))
+      const apolloClient = (ctx.apolloClient = initApolloClient({}, getToken))
 
       // Add apolloClient to the context of any component
       ctx.ctx.apolloClient = apolloClient;
@@ -63,7 +63,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
         pageProps = await PageComponent.getInitialProps(ctx)
       }
 
-      pageProps.authToken = authToken;
+      pageProps.getToken = getToken;
 
       // Only on the server:
       if (typeof window === 'undefined') {
@@ -104,8 +104,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
 
       return {
         ...pageProps,
-        apolloState,
-        authToken
+        apolloState
       }
     }
   }
@@ -118,16 +117,16 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
  * Creates or reuses apollo client in the browser.
  * @param  {Object} initialState
  */
-function initApolloClient(initialState, token) {
+function initApolloClient(initialState, getToken) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
-    return createApolloClient(initialState, token)
+    return createApolloClient(initialState, getToken)
   }
 
   // Reuse client on the client-side
   if (!globalApolloClient) {
-    globalApolloClient = createApolloClient(initialState, token)
+    globalApolloClient = createApolloClient(initialState, getToken)
   }
 
   return globalApolloClient
@@ -136,8 +135,9 @@ function initApolloClient(initialState, token) {
 /**
  * Creates and configures the ApolloClient
  * @param  {Object} [initialState={}]
+ * @param {Function} [getToken] getToken is a function instead a value because apollo client is not recreated if the token value change
  */
-function createApolloClient(initialState = {}, token) {
+function createApolloClient(initialState = {}, getToken) {
     const graphqlLink = new HttpLink({
         uri: process.env.FROM_DOCKER ? graphql_url.prod : graphql_url.dev, // Server URL (must be absolute),
 		    //credentials: 'include',
@@ -146,10 +146,10 @@ function createApolloClient(initialState = {}, token) {
       });
     
     const authLink = setContext((_, { headers }) => {
-        return {
+      return {
             headers: {
                 ...headers,
-                Authorization: token
+                Authorization: getToken()
             }
         };
     });

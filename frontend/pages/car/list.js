@@ -68,7 +68,6 @@ const CarList = ({cars}, pageProps) => {
     return (
         <div>
             <PageTitle>Mes voitures</PageTitle>
-            {<p>Chargement de vos voitures</p>}
             {!my_cars && <p>Vous n'avez aucune voiture</p>}
             {my_cars && <List cars={my_cars} refresh={refetch} />}
             <ButtonLink url="/car/add">Ajouter une voiture</ButtonLink>
