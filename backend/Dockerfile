@@ -25,11 +25,11 @@ RUN npm install -g prisma
 
 # Generate prisma client
 WORKDIR ./prisma_config
-RUN prisma generate && prisma deploy
+RUN prisma generate
 WORKDIR ../
 
 # Expose the api endpoint
 EXPOSE 4000
 
 # Serve the app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "prod"]

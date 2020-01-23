@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "env PRISMA_ENDPOINT=http://localhost:4466 node src/index.js",
+    "prod": "env PRISMA_ENDPOINT=http://prisma:4466 node src/index.js",
     "docker_build": "sudo docker build -t speedcar/backend:v1 .",
     "docker_run": "sudo docker run -it -p 4000:4000 speedcar/backend:v1"
   },
